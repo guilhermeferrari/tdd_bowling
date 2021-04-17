@@ -31,9 +31,7 @@ class Frame(Observer):
             self.observable.register_observer(self)
 
     def is_spare(self):
-        if self._are_all_pins_knocked_down():
-            return self._has_played_two_rolls()
-        return False
+        return self._are_all_pins_knocked_down() and self._has_played_two_rolls()
 
     def is_strike(self):
         return self.first_roll_score == self.TOTAL_NUMBER_PINS
