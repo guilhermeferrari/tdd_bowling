@@ -1,5 +1,6 @@
 from frame import Frame
 from game import Game
+import pytest
 
 
 def test_game_start():
@@ -11,6 +12,12 @@ def test_simple_frame_no_strikes_no_spares():
     game = Game()
     roll_many(game, [4, 3, 1, 2, 4, 5, 7, 1, 3, 3, 4, 3, 1, 2, 3, 1, 7, 1, 3, 3])
     assert game.score() == 61
+
+
+def test_simple_exceeding_row():
+    game = Game()
+    with pytest.raises(Exception):
+        roll_many(game, [4, 3, 1, 2, 4, 5, 7, 1, 3, 3, 4, 3, 1, 2, 3, 1, 7, 1, 3, 3, 2])
 
 
 def test_frame_single_spare():
