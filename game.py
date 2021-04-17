@@ -1,5 +1,6 @@
 from frame import Frame
 from game_observable import GameObservable
+from last_frame import LastFrame
 from observable import Observable
 
 
@@ -16,8 +17,13 @@ class Game(GameObservable):
             self._add_roll_latest_frame(pins_knocked_down)
 
     def _create_frame(self, pins_knocked_down):
-        frame = Frame(pins_knocked_down, self)
-        self.all_frames.append(frame)
+        number_of_frames = len(self.all_frames)
+        next_frame_should_be_last = (number_of_frames == 9)
+        if next_frame_should_be_last:
+            frame = LastFrame
+        else:
+            frame = Frame
+        self.all_frames.append(frame(pins_knocked_down, self))
 
     def _add_roll_latest_frame(self, pins_knocked_down):
         last_frame: Frame = self.all_frames[-1]
@@ -26,37 +32,9 @@ class Game(GameObservable):
     def score(self):
         score = 0
         for frame in self.all_frames:
-            score += frame.total_pins_knocked_down
-            if frame.is_spare():
-                score += self.sum_next_roll(frame)
-
-            elif frame.is_strike():
-                score += self.sum_next_two_rolls(frame)
+            score += frame.get_frame_score()
 
         return score
-
-    def sum_next_roll(self, frame):
-        if self.has_next_frame(frame):
-            index_next_frame = self.all_frames.index(frame) + 1
-            next_frame: Frame = self.all_frames[index_next_frame]
-            return next_frame.first_roll_score
-        else:
-            return 0
-
-    def sum_next_two_rolls(self, frame):
-        if self.has_next_frame(frame):
-            index_next_frame = self.all_frames.index(frame) + 1
-            next_frame: Frame = self.all_frames[index_next_frame]
-            if next_frame.is_strike() and self.has_next_frame(next_frame):
-                return next_frame.total_pins_knocked_down + self.sum_next_roll(next_frame)
-
-            return next_frame.total_pins_knocked_down
-        else:
-            return 0
-
-    def has_next_frame(self, frame):
-        index_current_frame = self.all_frames.index(frame)
-        return len(self.all_frames) > index_current_frame + 1
 
     def _should_create_new_frame(self):
         number_of_frames = len(self.all_frames)

@@ -6,11 +6,11 @@ class Frame(Observer):
     TOTAL_NUMBER_PINS = 10
     MAX_NUMBER_OF_FRAMES = 10
 
-    def __init__(self, pins_knocked_down, game):
+    def __init__(self, pins_knocked_down, game, should_register_observer=True):
         self.rolls = [pins_knocked_down]
         self.additional_points = []
         self.observable = game
-        if self.is_strike():
+        if self.is_strike() and should_register_observer:
             self.observable.register_observer(self)
 
     @property
@@ -36,9 +36,7 @@ class Frame(Observer):
         return False
 
     def is_strike(self):
-        if self._are_all_pins_knocked_down():
-            return self.first_roll_score == self.TOTAL_NUMBER_PINS
-        return False
+        return self.first_roll_score == self.TOTAL_NUMBER_PINS
 
     def is_maximum_rolls_reached(self, number_of_frames):
         is_last_frame = number_of_frames == self.MAX_NUMBER_OF_FRAMES
@@ -61,7 +59,7 @@ class Frame(Observer):
         return len(self.rolls) == 2
 
     def _has_played_three_rolls(self):
-        return len(self.rolls) == 2
+        return len(self.rolls) == 3
 
     def update(self, pins_knocked_down):
         self.additional_points.append(pins_knocked_down)
