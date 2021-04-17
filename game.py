@@ -1,16 +1,27 @@
 from frame import Frame
+from game_observable import GameObservable
+from observable import Observable
 
 
-class Game:
+class Game(GameObservable):
     def __init__(self):
         self.all_frames = []
+        self.observable = Observable()
 
     def roll(self, pins_knocked_down):
+        self.notify_observers(pins_knocked_down)
         if self._should_create_new_frame():
-            frame = Frame(pins_knocked_down)
-            self.all_frames.append(frame)
+            self._create_frame(pins_knocked_down)
         else:
-            self.all_frames[-1].set_next_roll_score(pins_knocked_down)
+            self._add_roll_latest_frame(pins_knocked_down)
+
+    def _create_frame(self, pins_knocked_down):
+        frame = Frame(pins_knocked_down, self)
+        self.all_frames.append(frame)
+
+    def _add_roll_latest_frame(self, pins_knocked_down):
+        last_frame: Frame = self.all_frames[-1]
+        last_frame.set_next_roll_score(pins_knocked_down)
 
     def score(self):
         score = 0
@@ -55,5 +66,14 @@ class Game:
 
         last_frame: Frame = self.all_frames[-1]
         return last_frame.is_maximum_rolls_reached(number_of_frames)
+
+    def remove_observer(self, observer):
+        self.observable.remove_observer(observer)
+
+    def register_observer(self, observer):
+        self.observable.register_observer(observer)
+
+    def notify_observers(self, pins_knocked_down):
+        self.observable.notify_observers(pins_knocked_down)
 
 

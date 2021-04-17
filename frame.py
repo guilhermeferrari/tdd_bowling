@@ -1,9 +1,17 @@
-class Frame:
+from observable import Observable
+from observer import Observer
+
+
+class Frame(Observer):
     TOTAL_NUMBER_PINS = 10
     MAX_NUMBER_OF_FRAMES = 10
 
-    def __init__(self, pins_knocked_down):
+    def __init__(self, pins_knocked_down, game):
         self.rolls = [pins_knocked_down]
+        self.additional_points = []
+        self.observable = game
+        if self.is_strike():
+            self.observable.register_observer(self)
 
     @property
     def first_roll_score(self):
@@ -14,8 +22,13 @@ class Frame:
         if self._has_played_two_rolls():
             return self.rolls[1]
 
+    def get_frame_score(self):
+        return sum(self.rolls) + sum(self.additional_points)
+
     def set_next_roll_score(self, pins_knocked_down):
         self.rolls.append(pins_knocked_down)
+        if self.is_spare():
+            self.observable.register_observer(self)
 
     def is_spare(self):
         if self._are_all_pins_knocked_down():
@@ -50,10 +63,22 @@ class Frame:
     def _has_played_three_rolls(self):
         return len(self.rolls) == 2
 
+    def update(self, pins_knocked_down):
+        pass
+
     def __repr__(self):
         representation = "|"
         for roll in self.rolls:
-            representation += f" {roll} |"
+            representation += f" {roll} -"
+
+        representation = representation[:-1] + " ;"
+        for additional in self.additional_points:
+            representation += f" {additional} -"
+
+        if self.additional_points:
+            representation = representation[:-1] + f" ; T: {self.get_frame_score()} "
+        else:
+            representation = representation + f" T: {self.get_frame_score()} "
+        representation += "|"
 
         return representation
-
