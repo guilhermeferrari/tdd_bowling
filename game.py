@@ -35,6 +35,10 @@ class Game(GameObservable):
 
         self.all_frames.append(frame(pins_knocked_down, self))
 
+    def _add_roll_latest_frame(self, pins_knocked_down):
+        last_frame: Frame = self.all_frames[-1]
+        last_frame.set_next_roll_score(pins_knocked_down)
+
     @property
     def _next_frame_should_be_last(self):
         return len(self.all_frames) == 9
@@ -42,10 +46,6 @@ class Game(GameObservable):
     @property
     def _has_reached_max_number_of_frames(self):
         return len(self.all_frames) == 10
-
-    def _add_roll_latest_frame(self, pins_knocked_down):
-        last_frame: Frame = self.all_frames[-1]
-        last_frame.set_next_roll_score(pins_knocked_down)
 
     def score(self):
         score = 0
