@@ -6,13 +6,13 @@ class LastFrame(Frame):
         super().__init__(pins_knocked_down, game, False)
 
     def set_next_roll_score(self, pins_knocked_down):
-        super().set_next_roll_score(pins_knocked_down)
+        self.rolls.append(pins_knocked_down)
 
     def is_maximum_rolls_reached(self):
-        if not self.is_strike():
-            return self._has_played_two_rolls()
-        else:
+        if self.is_strike():
             return self._has_played_three_rolls()
+        else:
+            return self._has_played_two_rolls()
 
     def _has_played_three_rolls(self):
         return len(self.rolls) == 3

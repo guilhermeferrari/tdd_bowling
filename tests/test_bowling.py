@@ -56,6 +56,14 @@ def test_frame_single_strike():
     assert game.score() == 66
 
 
+def test_frame_single_strikee():
+    game = Game()
+    strike = [10]
+    complete_frame = [4, 3, 1, 2, *strike, 2, 4, 3, 3, 4, 3, 1, 2, 3, 1, 7, 1, 1, 9]
+    roll_many(game, complete_frame)
+    assert game.score() == 70
+
+
 def test_strike_at_start():
     game = Game()
     roll_many(game, [10])
