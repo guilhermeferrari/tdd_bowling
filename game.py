@@ -26,7 +26,9 @@ class Game(GameObservable):
         return last_frame.is_maximum_rolls_reached()
 
     def _create_frame(self, pins_knocked_down):
-        if self._next_frame_should_be_last:
+        if self._has_reached_max_number_of_frames:
+            raise Exception("10 frames is the limit")
+        elif self._next_frame_should_be_last:
             frame = LastFrame
         else:
             frame = Frame
@@ -36,6 +38,10 @@ class Game(GameObservable):
     @property
     def _next_frame_should_be_last(self):
         return len(self.all_frames) == 9
+
+    @property
+    def _has_reached_max_number_of_frames(self):
+        return len(self.all_frames) == 10
 
     def _add_roll_latest_frame(self, pins_knocked_down):
         last_frame: Frame = self.all_frames[-1]
