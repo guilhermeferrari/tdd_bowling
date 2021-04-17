@@ -38,11 +38,7 @@ class Frame(Observer):
     def is_strike(self):
         return self.first_roll_score == self.TOTAL_NUMBER_PINS
 
-    def is_maximum_rolls_reached(self, number_of_frames):
-        is_last_frame = number_of_frames == self.MAX_NUMBER_OF_FRAMES
-        if is_last_frame and self.is_strike():
-            return self._has_played_three_rolls()
-
+    def is_maximum_rolls_reached(self):
         return (
             self._are_all_pins_knocked_down() or
             self._has_played_two_rolls()
@@ -57,9 +53,6 @@ class Frame(Observer):
 
     def _has_played_two_rolls(self):
         return len(self.rolls) == 2
-
-    def _has_played_three_rolls(self):
-        return len(self.rolls) == 3
 
     def update(self, pins_knocked_down):
         self.additional_points.append(pins_knocked_down)
