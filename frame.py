@@ -64,7 +64,9 @@ class Frame(Observer):
         return len(self.rolls) == 2
 
     def update(self, pins_knocked_down):
-        pass
+        if self.is_spare():
+            self.additional_points.append(pins_knocked_down)
+            self.observable.remove_observer(self)
 
     def __repr__(self):
         representation = "|"
