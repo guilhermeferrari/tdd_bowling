@@ -10,3 +10,12 @@ def test_frame_spare_score():
     roll_many(game, complete_frame)
     spare_frame: Frame = game.all_frames[2]
     assert spare_frame.get_frame_score() == 17
+
+
+def test_frame_strike_score():
+    game = Game()
+    strike = [10]
+    complete_frame = [4, 3, 1, 2, *strike, 2, 4, 3, 3, 4, 3, 1, 2, 3, 1, 7, 1, 3, 3]
+    roll_many(game, complete_frame)
+    spare_frame: Frame = game.all_frames[2]
+    assert spare_frame.get_frame_score() == 16
