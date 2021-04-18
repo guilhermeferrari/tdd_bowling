@@ -48,11 +48,10 @@ class Game(GameObservable):
         return len(self.all_frames) == 10
 
     def score(self):
-        score = 0
-        for frame in self.all_frames:
-            score += frame.get_frame_score()
-
-        return score
+        if self.all_frames:
+            return sum(self.all_frames).get_frame_score()
+        else:
+            return 0
 
     def remove_observer(self, observer):
         self.observable.remove_observer(observer)
