@@ -67,6 +67,12 @@ class Frame(Observer):
     def __add__(self, other):
         return self.get_frame_score() + other.get_frame_score()
 
+    def __radd__(self, other):
+        if other == 0:
+            return self
+        else:
+            return self.__add__(other)
+
     def __repr__(self):
         representation = "|"
         for roll in self.rolls:
