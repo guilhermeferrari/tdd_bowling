@@ -65,7 +65,9 @@ class Frame(Observer):
         )
 
     def __add__(self, other):
-        return self.get_frame_score() + other.get_frame_score()
+        first_score = self.get_frame_score()
+        second_score = other.get_frame_score()
+        return Frame(first_score + second_score, None, False)
 
     def __radd__(self, other):
         if other == 0:

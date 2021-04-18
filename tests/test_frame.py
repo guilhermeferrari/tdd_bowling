@@ -27,7 +27,8 @@ def test_add_frames():
     frame1.set_next_roll_score(2)
     frame2 = Frame(2, game)
     frame1.set_next_roll_score(3)
-    assert frame1 + frame2 == 8
+    added_frames = frame1 + frame2
+    assert added_frames.get_frame_score() == 8
 
 
 def test_sum_frames():
@@ -35,4 +36,5 @@ def test_sum_frames():
     frames = [Frame(1, game), Frame(2, game)]
     frames[0].set_next_roll_score(2)
     frames[1].set_next_roll_score(3)
-    assert sum(frames) == 8
+    total_frame = sum(frames)
+    assert total_frame.get_frame_score() == 8
