@@ -64,6 +64,9 @@ class Frame(Observer):
             (self.is_strike() and len(self.additional_points) == 2)
         )
 
+    def __add__(self, other):
+        return self.get_frame_score() + other.get_frame_score()
+
     def __repr__(self):
         representation = "|"
         for roll in self.rolls:

@@ -19,3 +19,12 @@ def test_frame_strike_score():
     roll_many(game, complete_frame)
     spare_frame: Frame = game.all_frames[2]
     assert spare_frame.get_frame_score() == 16
+
+
+def test_add_frames():
+    game = Game()
+    frame1 = Frame(1, game)
+    frame1.set_next_roll_score(2)
+    frame2 = Frame(2, game)
+    frame1.set_next_roll_score(3)
+    assert frame1 + frame2 == 8
