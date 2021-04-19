@@ -49,7 +49,7 @@ class Game(GameObservable):
 
     def score(self):
         if self.all_frames:
-            return sum(self.all_frames).get_frame_score()
+            return sum(self.all_frames)
         else:
             return 0
 
